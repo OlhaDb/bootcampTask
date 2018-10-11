@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<img id='img'/>
+<script>
+    let images = ["https://images.pexels.com/photos/1275929/pexels-photo-1275929.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=9060",
+        "https://images.pexels.com/photos/1451074/pexels-photo-1451074.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=450&w=560",
+        "https://images.pexels.com/photos/1460880/pexels-photo-1460880.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=200",
+        "https://images.pexels.com/photos/1437629/pexels-photo-1437629.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=300&w=500",
+        "https://images.pexels.com/photos/87284/ocean-seacoast-rocks-water-87284.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=426&w=400",
+        "https://images.pexels.com/photos/885880/pexels-photo-885880.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=150&w=1260",
+        "https://images.pexels.com/photos/1112598/pexels-photo-1112598.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"];
+    let element = document.getElementById('img');
+    let interval;
+
+     let showPic = ()=>{
+        element.style.display = 'block';
+        let max = images.length - 1;
+        interval = setInterval(()=>{
+            element.style.position = 'absolute';
+            element.src = `${images[Math.floor(Math.random() * Math.floor(max))]}`;
+            element.style.top = Math.random() * (document.documentElement.clientHeight - element.clientHeight) + 'px';
+            element.style.left = Math.random() * (document.documentElement.clientWidth - element.clientWidth) + 'px';
+            element.style.maxHeight = document.documentElement.clientHeight + 'px';
+            element.style.maxWidth = document.documentElement.clientWidth + 'px';
+        }, 5000);
+    };
+    //returns a wrapper that defers a call to onComplete
+    let debounce = (f)=>{
+        let timer = null;
+        return function (...args) {
+            const onComplete = () => {
+                f.apply(this, args);
+                timer = null;
+            };
+            element.style.display = 'none';
+            timer && clearTimeout(timer);
+            interval && clearInterval(interval);
+            timer = setTimeout(onComplete, 10000);
+        };
+    };
+    let showPicDebounced = debounce(showPic);
+    document.addEventListener('keydown', showPicDebounced);
+    document.addEventListener('mousedown', showPicDebounced);
+    document.addEventListener('mousemove', showPicDebounced);
+    document.addEventListener('onwheel', showPicDebounced);
+</script>
+</body>
+</html>
